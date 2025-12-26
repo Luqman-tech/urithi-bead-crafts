@@ -1,7 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Heart, Star, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useCart } from "@/contexts/CartContext";
 
 export interface Product {
   id: string;
@@ -26,9 +27,36 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const { addToCart } = useCart();
+  const navigate = useNavigate();
   const discount = product.originalPrice
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : 0;
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    addToCart({
+      productId: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      quantity: 1,
+      artisanName: product.artisan.name,
+    });
+  };
+
+  const handleBuyNow = (e: React.MouseEvent) => {
+    e.preventDefault();
+    addToCart({
+      productId: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      quantity: 1,
+      artisanName: product.artisan.name,
+    });
+    navigate("/checkout");
+  };
 
   return (
     <div className="group relative overflow-hidden rounded-xl bg-card shadow-soft transition-all duration-300 hover:shadow-medium">
@@ -65,6 +93,7 @@ export function ProductCard({ product }: ProductCardProps) {
             size="icon"
             className="h-9 w-9 rounded-full bg-background/90 backdrop-blur-sm hover:bg-background"
             aria-label="Add to cart"
+            onClick={handleAddToCart}
           >
             <ShoppingCart className="h-4 w-4" />
           </Button>
