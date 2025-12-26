@@ -20,6 +20,7 @@ import {
   Clock,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useCart } from "@/contexts/CartContext";
 
 // Sample product data
 const sampleProduct = {
@@ -126,6 +127,7 @@ const reviews = [
 export default function ProductDetail() {
   const { id } = useParams();
   const { toast } = useToast();
+  const { addToCart } = useCart();
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
 
@@ -135,9 +137,14 @@ export default function ProductDetail() {
     : 0;
 
   const handleAddToCart = () => {
-    toast({
-      title: "Added to cart",
-      description: `${quantity} × ${product.name} added to your cart`,
+    addToCart({
+      productId: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.images[0],
+      quantity,
+      artisanId: product.artisan.id,
+      artisanName: product.artisan.name,
     });
   };
 

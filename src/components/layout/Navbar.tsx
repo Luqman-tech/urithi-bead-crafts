@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Menu, X, ShoppingBag, Search, User } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
 
 const navigation = [
   { name: "Marketplace", href: "/marketplace" },
@@ -14,6 +15,7 @@ const navigation = [
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { itemCount } = useCart();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -50,9 +52,16 @@ export function Navbar() {
           <Button variant="ghost" size="icon" aria-label="Search">
             <Search className="h-5 w-5" />
           </Button>
-          <Button variant="ghost" size="icon" aria-label="Cart">
-            <ShoppingBag className="h-5 w-5" />
-          </Button>
+          <Link to="/cart" className="relative">
+            <Button variant="ghost" size="icon" aria-label="Cart">
+              <ShoppingBag className="h-5 w-5" />
+              {itemCount > 0 && (
+                <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs font-medium text-primary-foreground">
+                  {itemCount > 9 ? "9+" : itemCount}
+                </span>
+              )}
+            </Button>
+          </Link>
           <Button variant="ghost" size="icon" aria-label="Account">
             <User className="h-5 w-5" />
           </Button>
@@ -65,9 +74,16 @@ export function Navbar() {
 
         {/* Mobile menu button */}
         <div className="flex items-center gap-2 lg:hidden">
-          <Button variant="ghost" size="icon" aria-label="Cart">
-            <ShoppingBag className="h-5 w-5" />
-          </Button>
+          <Link to="/cart" className="relative">
+            <Button variant="ghost" size="icon" aria-label="Cart">
+              <ShoppingBag className="h-5 w-5" />
+              {itemCount > 0 && (
+                <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs font-medium text-primary-foreground">
+                  {itemCount > 9 ? "9+" : itemCount}
+                </span>
+              )}
+            </Button>
+          </Link>
           <Button
             variant="ghost"
             size="icon"
